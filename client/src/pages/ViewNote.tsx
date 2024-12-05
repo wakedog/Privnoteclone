@@ -51,6 +51,8 @@ export function ViewNote() {
       const cryptoKey = await importKey(key);
       const decrypted = await decryptMessage(encryptedContent, iv, cryptoKey);
       setContent(decrypted);
+      setNeedsPassword(false); // Clear password requirement after successful decryption
+      setError(null); // Clear any previous errors
 
       // Mark the note as read
       await fetch(`/api/notes/${params.id}/read`, {
@@ -98,8 +100,15 @@ export function ViewNote() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <Button type="submit" className="w-full">
-              Unlock Note
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Verifying...
+                </>
+              ) : (
+                "Unlock Note"
+              )}
             </Button>
           </form>
         </Card>
