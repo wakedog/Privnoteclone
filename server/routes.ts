@@ -56,14 +56,16 @@ export function registerRoutes(app: Express) {
         iv: note.iv,
       });
 
-      // Delete the note asynchronously
-      setTimeout(async () => {
+      // Delete the note after sending the response
+      res.on('finish', async () => {
         try {
+          // Give client some time to render the content
+          await new Promise(resolve => setTimeout(resolve, 30000)); // 30 seconds delay
           await db.delete(notes).where(eq(notes.id, note.id));
         } catch (error) {
           console.error("Failed to delete note:", error);
         }
-      }, 5000);
+      });
 
     } catch (error) {
       console.error("Failed to fetch note:", error);
