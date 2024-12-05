@@ -15,55 +15,55 @@ export function ViewNote() {
   const [needsPassword, setNeedsPassword] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
 
-  useEffect(() => {
-    const fetchAndDecryptNote = async () => {
-      try {
-        if (!params?.id) return;
-        
-        // Get the key from URL fragment
-        const key = window.location.hash.slice(1);
-        if (!key) {
-          setError("Invalid decryption key");
-          return;
-        }
-
-        const passwordHash = password ? await hashPassword(password) : null;
-        const response = await fetch(`/api/notes/${params.id}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ passwordHash })
-        });
-        if (!response.ok) {
-          if (response.status === 404) {
-            setError("This note has been deleted or does not exist");
-          } else if (response.status === 401) {
-            setNeedsPassword(true);
-            setLoading(false);
-            return;
-          } else {
-            setError("Failed to fetch note");
-          }
-          return;
-        }
-
-        const { encryptedContent, iv } = await response.json();
-        const cryptoKey = await importKey(key);
-        const decrypted = await decryptMessage(encryptedContent, iv, cryptoKey);
-        setContent(decrypted);
-
-        // Mark the note as read
-        await fetch(`/api/notes/${params.id}/read`, {
-          method: 'POST'
-        });
-      } catch (err) {
-        setError("Failed to decrypt note");
-      } finally {
-        setLoading(false);
+  const fetchAndDecryptNote = async () => {
+    try {
+      if (!params?.id) return;
+      
+      // Get the key from URL fragment
+      const key = window.location.hash.slice(1);
+      if (!key) {
+        setError("Invalid decryption key");
+        return;
       }
-    };
 
+      const passwordHash = password ? await hashPassword(password) : null;
+      const response = await fetch(`/api/notes/${params.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ passwordHash })
+      });
+      if (!response.ok) {
+        if (response.status === 404) {
+          setError("This note has been deleted or does not exist");
+        } else if (response.status === 401) {
+          setNeedsPassword(true);
+          setLoading(false);
+          return;
+        } else {
+          setError("Failed to fetch note");
+        }
+        return;
+      }
+
+      const { encryptedContent, iv } = await response.json();
+      const cryptoKey = await importKey(key);
+      const decrypted = await decryptMessage(encryptedContent, iv, cryptoKey);
+      setContent(decrypted);
+
+      // Mark the note as read
+      await fetch(`/api/notes/${params.id}/read`, {
+        method: 'POST'
+      });
+    } catch (err) {
+      setError("Failed to decrypt note");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchAndDecryptNote();
   }, [params?.id]);
 
@@ -85,13 +85,19 @@ export function ViewNote() {
             setLoading(true);
             fetchAndDecryptNote();
           }} className="space-y-4">
-            <input
-              type="password"
-              placeholder="Enter password"
-              className="w-full px-3 py-2 border rounded-md"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                placeholder="Enter password"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
             <Button type="submit" className="w-full">
               Unlock Note
             </Button>
