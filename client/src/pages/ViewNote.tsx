@@ -39,6 +39,11 @@ export function ViewNote() {
         const cryptoKey = await importKey(key);
         const decrypted = await decryptMessage(encryptedContent, iv, cryptoKey);
         setContent(decrypted);
+
+        // Mark the note as read
+        await fetch(`/api/notes/${params.id}/read`, {
+          method: 'POST'
+        });
       } catch (err) {
         setError("Failed to decrypt note");
       } finally {
