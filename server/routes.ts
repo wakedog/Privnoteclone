@@ -38,6 +38,13 @@ router.post("/api/notes/:id", async (req, res) => {
       return res.status(404).json({ error: "Note has already been read" });
     }
 
+    // Check if note has expired
+    if (note.expiresAt && new Date(note.expiresAt) < new Date()) {
+      // Delete expired note
+      await db.delete(notes).where(eq(notes.id, id));
+      return res.status(404).json({ error: "This note has expired" });
+    }
+
     // Check password if note is password protected
     if (note.passwordHash) {
       const providedHash = req.body.passwordHash;

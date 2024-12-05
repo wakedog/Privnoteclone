@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react";
 interface FormData {
   content: string;
   password?: string;
+  expiresIn?: string;
 }
 
 export function Home() {
@@ -25,13 +26,20 @@ export function Home() {
       const { encrypted, iv } = await encryptMessage(data.content, key);
 
       const passwordHash = data.password ? await hashPassword(data.password) : null;
+      let expiresAt = null;
+      if (data.expiresIn) {
+        const hours = parseInt(data.expiresIn);
+        expiresAt = new Date(Date.now() + hours * 60 * 60 * 1000).toISOString();
+      }
+
       const response = await fetch("/api/notes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           encryptedContent: encrypted, 
           iv,
-          passwordHash 
+          passwordHash,
+          expiresAt
         }),
       });
 
@@ -87,16 +95,33 @@ export function Home() {
               {errors.content && (
                 <p className="text-sm text-destructive">{errors.content.message}</p>
               )}
-              <div className="space-y-2">
-                <input
-                  type="password"
-                  placeholder="Optional password protection"
-                  className="w-full px-3 py-2 border rounded-md"
-                  {...register("password")}
-                />
-                <p className="text-sm text-muted-foreground">
-                  Leave blank for no password protection
-                </p>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <input
+                    type="password"
+                    placeholder="Optional password protection"
+                    className="w-full px-3 py-2 border rounded-md"
+                    {...register("password")}
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    Leave blank for no password protection
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <select
+                    className="w-full px-3 py-2 border rounded-md"
+                    {...register("expiresIn")}
+                  >
+                    <option value="">Never expire</option>
+                    <option value="1">1 hour</option>
+                    <option value="24">24 hours</option>
+                    <option value="72">3 days</option>
+                    <option value="168">1 week</option>
+                  </select>
+                  <p className="text-sm text-muted-foreground">
+                    Choose when the note should expire
+                  </p>
+                </div>
               </div>
             </div>
             <Button 

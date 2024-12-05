@@ -7,6 +7,7 @@ export const notes = pgTable("notes", {
   encryptedContent: text("encrypted_content").notNull(),
   iv: text("iv").notNull(), // Initialization vector for encryption
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at"), // Optional expiration time
   readOnce: integer("read_once").default(0).notNull(),
   passwordHash: text("password_hash"), // Optional password protection
 });
