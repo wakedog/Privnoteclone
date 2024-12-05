@@ -3,7 +3,7 @@ import { useRoute } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { importKey, decryptMessage } from "../lib/crypto";
+import { importKey, decryptMessage, hashPassword } from "../lib/crypto";
 import { Loader2, ShieldAlert } from "lucide-react";
 
 export function ViewNote() {
@@ -12,6 +12,8 @@ export function ViewNote() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [content, setContent] = useState<string | null>(null);
+  const [needsPassword, setNeedsPassword] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>("");
 
   useEffect(() => {
     const fetchAndDecryptNote = async () => {
@@ -25,10 +27,21 @@ export function ViewNote() {
           return;
         }
 
-        const response = await fetch(`/api/notes/${params.id}`);
+        const passwordHash = password ? await hashPassword(password) : null;
+        const response = await fetch(`/api/notes/${params.id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ passwordHash })
+        });
         if (!response.ok) {
           if (response.status === 404) {
             setError("This note has been deleted or does not exist");
+          } else if (response.status === 401) {
+            setNeedsPassword(true);
+            setLoading(false);
+            return;
           } else {
             setError("Failed to fetch note");
           }
@@ -58,6 +71,32 @@ export function ViewNote() {
     return (
       <div className="container max-w-2xl mx-auto p-4 flex items-center justify-center min-h-[400px]">
         <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (needsPassword) {
+    return (
+      <div className="container max-w-2xl mx-auto p-4 space-y-8">
+        <Card className="p-6 space-y-4">
+          <h2 className="text-xl font-semibold text-center">This note is password protected</h2>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            setLoading(true);
+            fetchAndDecryptNote();
+          }} className="space-y-4">
+            <input
+              type="password"
+              placeholder="Enter password"
+              className="w-full px-3 py-2 border rounded-md"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="submit" className="w-full">
+              Unlock Note
+            </Button>
+          </form>
+        </Card>
       </div>
     );
   }

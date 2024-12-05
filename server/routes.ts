@@ -19,7 +19,7 @@ router.post("/api/notes", async (req, res) => {
 });
 
 // Get a note by ID
-router.get("/api/notes/:id", async (req, res) => {
+router.post("/api/notes/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     if (isNaN(id)) {
@@ -36,6 +36,14 @@ router.get("/api/notes/:id", async (req, res) => {
 
     if (note.readOnce === 1) {
       return res.status(404).json({ error: "Note has already been read" });
+    }
+
+    // Check password if note is password protected
+    if (note.passwordHash) {
+      const providedHash = req.body.passwordHash;
+      if (!providedHash || providedHash !== note.passwordHash) {
+        return res.status(401).json({ error: "Password required or incorrect" });
+      }
     }
 
     // Return the encrypted content

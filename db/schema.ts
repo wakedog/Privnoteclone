@@ -8,6 +8,7 @@ export const notes = pgTable("notes", {
   iv: text("iv").notNull(), // Initialization vector for encryption
   createdAt: timestamp("created_at").defaultNow().notNull(),
   readOnce: integer("read_once").default(0).notNull(),
+  passwordHash: text("password_hash"), // Optional password protection
 });
 
 export const insertNoteSchema = createInsertSchema(notes);

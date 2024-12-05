@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
-import { generateKey, exportKey, encryptMessage } from "../lib/crypto";
+import { generateKey, exportKey, encryptMessage, hashPassword } from "../lib/crypto";
 import { Loader2 } from "lucide-react";
 
 interface FormData {
   content: string;
+  password?: string;
 }
 
 export function Home() {
@@ -18,15 +19,20 @@ export function Home() {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
   const createNote = useMutation({
-    mutationFn: async (content: string) => {
+    mutationFn: async (data: FormData) => {
       const key = await generateKey();
       const keyString = await exportKey(key);
-      const { encrypted, iv } = await encryptMessage(content, key);
+      const { encrypted, iv } = await encryptMessage(data.content, key);
 
+      const passwordHash = data.password ? await hashPassword(data.password) : null;
       const response = await fetch("/api/notes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ encryptedContent: encrypted, iv }),
+        body: JSON.stringify({ 
+          encryptedContent: encrypted, 
+          iv,
+          passwordHash 
+        }),
       });
 
       if (!response.ok) {
@@ -47,7 +53,7 @@ export function Home() {
   });
 
   const onSubmit = (data: FormData) => {
-    createNote.mutate(data.content);
+    createNote.mutate(data);
   };
 
   const copyToClipboard = () => {
@@ -72,14 +78,27 @@ export function Home() {
       <Card className="p-6">
         {!url ? (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <Textarea
-              placeholder="Enter your secret message..."
-              className="min-h-[200px]"
-              {...register("content", { required: "Content is required" })}
-            />
-            {errors.content && (
-              <p className="text-sm text-destructive">{errors.content.message}</p>
-            )}
+            <div className="space-y-4">
+              <Textarea
+                placeholder="Enter your secret message..."
+                className="min-h-[200px]"
+                {...register("content", { required: "Content is required" })}
+              />
+              {errors.content && (
+                <p className="text-sm text-destructive">{errors.content.message}</p>
+              )}
+              <div className="space-y-2">
+                <input
+                  type="password"
+                  placeholder="Optional password protection"
+                  className="w-full px-3 py-2 border rounded-md"
+                  {...register("password")}
+                />
+                <p className="text-sm text-muted-foreground">
+                  Leave blank for no password protection
+                </p>
+              </div>
+            </div>
             <Button 
               type="submit" 
               className="w-full"
