@@ -13,7 +13,7 @@ export async function generateKey(): Promise<CryptoKey> {
 
 export async function exportKey(key: CryptoKey): Promise<string> {
   const rawKey = await window.crypto.subtle.exportKey("raw", key);
-  return btoa(String.fromCharCode(...new Uint8Array(rawKey)));
+  return btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(rawKey))));
 }
 
 export async function importKey(keyStr: string): Promise<CryptoKey> {
@@ -41,8 +41,8 @@ export async function encryptMessage(message: string, key: CryptoKey): Promise<{
   );
 
   return {
-    encrypted: btoa(String.fromCharCode(...new Uint8Array(encrypted))),
-    iv: btoa(String.fromCharCode(...iv))
+    encrypted: btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(encrypted)))),
+    iv: btoa(String.fromCharCode.apply(null, Array.from(iv)))
   };
 }
 
