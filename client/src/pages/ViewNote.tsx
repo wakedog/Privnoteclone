@@ -25,7 +25,6 @@ export function ViewNote() {
     try {
       if (!params?.id) return;
       
-      // Get the key from URL fragment
       const key = window.location.hash.slice(1);
       if (!key) {
         setError("Invalid decryption key");
@@ -57,10 +56,9 @@ export function ViewNote() {
       const cryptoKey = await importKey(key);
       const decrypted = await decryptMessage(encryptedContent, iv, cryptoKey);
       setContent(decrypted);
-      setNeedsPassword(false); // Clear password requirement after successful decryption
-      setError(null); // Clear any previous errors
+      setNeedsPassword(false);
+      setError(null);
 
-      // Mark the note as read
       await fetch(`/api/notes/${params.id}/read`, {
         method: 'POST'
       });
@@ -78,7 +76,7 @@ export function ViewNote() {
   if (loading) {
     return (
       <div className="container max-w-2xl mx-auto p-4 flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary/80" />
       </div>
     );
   }
@@ -126,9 +124,9 @@ export function ViewNote() {
     return (
       <div className="container max-w-2xl mx-auto p-4 space-y-8">
         <Card className="p-6 text-center space-y-4 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300">
-          <ShieldAlert className="h-12 w-12 mx-auto text-destructive" />
-          <h2 className="text-xl font-semibold">{error}</h2>
-          <Button onClick={() => window.location.href = "/"}>
+          <ShieldAlert className="h-12 w-12 mx-auto text-destructive opacity-80" />
+          <h2 className="text-xl font-semibold bg-gradient-to-r from-destructive/90 to-destructive/70 bg-clip-text text-transparent">{error}</h2>
+          <Button onClick={() => window.location.href = "/"} className="bg-primary/90 hover:bg-primary transition-all duration-200">
             Create New Note
           </Button>
         </Card>
@@ -148,12 +146,12 @@ export function ViewNote() {
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" className="bg-background/80 hover:bg-accent/80 transition-all duration-200">
                 <Share2 className="h-4 w-4" />
                 <span className="sr-only">Share note</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuItem onClick={() => {
                 const url = window.location.href;
                 window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent('Check out this secure note!')}`, '_blank');
@@ -188,7 +186,10 @@ export function ViewNote() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <Button onClick={() => window.location.href = "/"} className="w-full">
+        <Button 
+          onClick={() => window.location.href = "/"} 
+          className="w-full transition-all duration-300 hover:shadow-lg bg-gradient-to-r from-primary/90 via-primary to-primary/90 hover:from-primary hover:via-primary/90 hover:to-primary backdrop-blur-sm"
+        >
           Create New Note
         </Button>
       </Card>
