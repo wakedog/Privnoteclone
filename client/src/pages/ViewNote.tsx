@@ -75,8 +75,16 @@ export function ViewNote() {
 
   if (loading) {
     return (
-      <div className="container max-w-2xl mx-auto p-4 flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary/80" />
+      <div className="container max-w-2xl mx-auto p-4">
+        <Card className="p-6 space-y-4 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 animate-pulse">
+          <div className="flex items-center justify-center min-h-[200px] bg-muted/50 rounded-lg backdrop-blur-sm">
+            <Loader2 className="h-8 w-8 animate-spin text-primary/80" />
+          </div>
+          <div className="flex justify-between items-center opacity-50">
+            <div className="h-4 w-48 bg-muted rounded"></div>
+            <div className="h-8 w-8 bg-muted rounded-md"></div>
+          </div>
+        </Card>
       </div>
     );
   }
@@ -122,11 +130,20 @@ export function ViewNote() {
 
   if (error) {
     return (
-      <div className="container max-w-2xl mx-auto p-4 space-y-8">
-        <Card className="p-6 text-center space-y-4 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300">
-          <ShieldAlert className="h-12 w-12 mx-auto text-destructive opacity-80" />
-          <h2 className="text-xl font-semibold bg-gradient-to-r from-destructive/90 to-destructive/70 bg-clip-text text-transparent">{error}</h2>
-          <Button onClick={() => window.location.href = "/"} className="bg-primary/90 hover:bg-primary transition-all duration-200">
+      <div className="container max-w-2xl mx-auto p-4">
+        <Card className="p-8 text-center space-y-6 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300 hover:shadow-lg">
+          <div className="relative">
+            <div className="absolute inset-0 bg-destructive/10 blur-2xl rounded-full"></div>
+            <ShieldAlert className="relative h-16 w-16 mx-auto text-destructive opacity-90 animate-in fade-in-0 zoom-in-95 duration-500" />
+          </div>
+          <div className="space-y-3">
+            <h2 className="text-2xl font-semibold bg-gradient-to-r from-destructive/90 to-destructive/70 bg-clip-text text-transparent animate-in slide-in-from-bottom-2 duration-500">{error}</h2>
+            <p className="text-muted-foreground animate-in slide-in-from-bottom-3 duration-500">The note may have been deleted or accessed already.</p>
+          </div>
+          <Button 
+            onClick={() => window.location.href = "/"} 
+            className="transition-all duration-300 hover:shadow-lg bg-gradient-to-r from-primary/90 via-primary to-primary/90 hover:from-primary hover:via-primary/90 hover:to-primary backdrop-blur-sm animate-in slide-in-from-bottom-4 duration-500"
+          >
             Create New Note
           </Button>
         </Card>
