@@ -54,15 +54,28 @@ export function Home() {
           console.log("Processing file:", file.name, "Size:", file.size);
           
           try {
+            console.log(`Starting encryption for file: ${file.name} (${file.size} bytes)`);
+            
+            // Validate file type
+            if (!file.type) {
+              throw new Error("File type is not supported");
+            }
+            
             const fileEncryption = await encryptFile(file, key);
-            console.log("File encrypted successfully");
+            console.log(`File encryption completed. Encrypted data length: ${fileEncryption.encrypted.length}`);
+            
             encryptedFile = fileEncryption.encrypted;
             fileIv = fileEncryption.iv;
             fileName = file.name;
             fileType = file.type;
+            
+            console.log("File metadata prepared successfully");
           } catch (error: any) {
-            console.error("File encryption failed:", error);
-            throw new Error(`File encryption failed: ${error?.message || 'Unknown error'}`);
+            console.error("Detailed file encryption error:", error);
+            if (error.message.includes("Maximum call stack size exceeded")) {
+              throw new Error("File is too large to process. Please try a smaller file.");
+            }
+            throw new Error(`File encryption failed: ${error?.message || 'Unknown error occurred during encryption'}`);
           }
         }
 
