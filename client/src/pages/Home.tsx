@@ -44,14 +44,26 @@ export function Home() {
         let fileType = null;
 
         if (data.file && data.file[0]) {
-          console.log("Processing file:", data.file[0].name, "Size:", data.file[0].size);
           const file = data.file[0];
-          const fileEncryption = await encryptFile(file, key);
-          console.log("File encrypted successfully");
-          encryptedFile = fileEncryption.encrypted;
-          fileIv = fileEncryption.iv;
-          fileName = file.name;
-          fileType = file.type;
+          const maxSize = 50 * 1024 * 1024; // 50MB limit
+          
+          if (file.size > maxSize) {
+            throw new Error("File size exceeds 50MB limit");
+          }
+          
+          console.log("Processing file:", file.name, "Size:", file.size);
+          
+          try {
+            const fileEncryption = await encryptFile(file, key);
+            console.log("File encrypted successfully");
+            encryptedFile = fileEncryption.encrypted;
+            fileIv = fileEncryption.iv;
+            fileName = file.name;
+            fileType = file.type;
+          } catch (error: any) {
+            console.error("File encryption failed:", error);
+            throw new Error(`File encryption failed: ${error?.message || 'Unknown error'}`);
+          }
         }
 
         const passwordHash = data.password ? await hashPassword(data.password) : null;

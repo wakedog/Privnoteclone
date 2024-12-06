@@ -73,22 +73,44 @@ export async function decryptMessage(encryptedMsg: string, iv: string, key: Cryp
 }
 
 export async function encryptFile(file: File, key: CryptoKey): Promise<{ encrypted: string; iv: string }> {
-  const arrayBuffer = await file.arrayBuffer();
-  const iv = window.crypto.getRandomValues(new Uint8Array(12));
-  
-  const encrypted = await window.crypto.subtle.encrypt(
-    {
-      name: "AES-GCM",
-      iv,
-    },
-    key,
-    arrayBuffer
-  );
+  try {
+    console.log("Starting file encryption for:", file.name);
+    const arrayBuffer = await file.arrayBuffer();
+    console.log("File converted to ArrayBuffer, size:", arrayBuffer.byteLength);
+    
+    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+    console.log("Generated IV for encryption");
+    
+    const encrypted = await window.crypto.subtle.encrypt(
+      {
+        name: "AES-GCM",
+        iv,
+      },
+      key,
+      arrayBuffer
+    );
+    console.log("File encrypted successfully, encrypted size:", encrypted.byteLength);
 
-  return {
-    encrypted: btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(encrypted)))),
-    iv: btoa(String.fromCharCode.apply(null, Array.from(iv)))
-  };
+    // Convert to Base64 in chunks to handle large files
+    const chunkSize = 1024 * 1024; // 1MB chunks
+    const encryptedArray = new Uint8Array(encrypted);
+    let base64Result = '';
+    
+    for (let i = 0; i < encryptedArray.length; i += chunkSize) {
+      const chunk = encryptedArray.slice(i, i + chunkSize);
+      base64Result += btoa(String.fromCharCode.apply(null, Array.from(chunk)));
+    }
+    
+    console.log("File converted to Base64 successfully");
+    return {
+      encrypted: base64Result,
+      iv: btoa(String.fromCharCode.apply(null, Array.from(iv)))
+    };
+  } catch (error: any) {
+    console.error("Error during file encryption:", error);
+    const errorMessage = error?.message || 'Unknown error occurred';
+    throw new Error(`Failed to encrypt file: ${errorMessage}`);
+  }
 }
 
 export async function decryptFile(encryptedData: string, iv: string, key: CryptoKey): Promise<ArrayBuffer> {
