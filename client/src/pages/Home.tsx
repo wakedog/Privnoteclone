@@ -7,7 +7,13 @@ import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { generateKey, exportKey, encryptMessage, hashPassword, encryptFile } from "../lib/crypto";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { Loader2 } from "lucide-react";
+import { Loader2, Share2, Copy, Twitter, Facebook, Linkedin } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface FormData {
   content: string;
@@ -185,9 +191,40 @@ export function Home() {
             <div className="p-4 bg-muted rounded-lg break-all">
               <p className="text-sm font-mono">{url}</p>
             </div>
-            <Button onClick={copyToClipboard} className="w-full">
-              Copy Secure Link
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={copyToClipboard} className="flex-1">
+                <Copy className="h-4 w-4 mr-2" />
+                Copy Secure Link
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline">
+                    <Share2 className="h-4 w-4 mr-2" />
+                    Share
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => {
+                    window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent('Check out this secure note!')}`, '_blank');
+                  }}>
+                    <Twitter className="h-4 w-4 mr-2" />
+                    Share on Twitter
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+                  }}>
+                    <Facebook className="h-4 w-4 mr-2" />
+                    Share on Facebook
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+                  }}>
+                    <Linkedin className="h-4 w-4 mr-2" />
+                    Share on LinkedIn
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <p className="text-sm text-muted-foreground text-center">
               This note will self-destruct after being read
             </p>

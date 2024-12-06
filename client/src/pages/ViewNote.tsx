@@ -4,7 +4,13 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { importKey, decryptMessage, hashPassword, decryptFile } from "../lib/crypto";
-import { Loader2, ShieldAlert } from "lucide-react";
+import { Loader2, ShieldAlert, Copy, Share2, Twitter, Facebook, Linkedin } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function ViewNote() {
   const [match, params] = useRoute("/note/:id");
@@ -136,8 +142,51 @@ export function ViewNote() {
         <div className="bg-muted p-4 rounded-lg">
           <pre className="whitespace-pre-wrap">{content}</pre>
         </div>
-        <div className="text-center text-sm text-muted-foreground">
-          This note has been destroyed and cannot be accessed again
+        <div className="flex justify-between items-center">
+          <div className="text-sm text-muted-foreground">
+            This note has been destroyed and cannot be accessed again
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Share2 className="h-4 w-4" />
+                <span className="sr-only">Share note</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => {
+                const url = window.location.href;
+                window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent('Check out this secure note!')}`, '_blank');
+              }}>
+                <Twitter className="h-4 w-4 mr-2" />
+                Share on Twitter
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {
+                const url = window.location.href;
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+              }}>
+                <Facebook className="h-4 w-4 mr-2" />
+                Share on Facebook
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {
+                const url = window.location.href;
+                window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+              }}>
+                <Linkedin className="h-4 w-4 mr-2" />
+                Share on LinkedIn
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+                toast({
+                  title: "Link copied!",
+                  description: "The note link has been copied to your clipboard",
+                });
+              }}>
+                <Copy className="h-4 w-4 mr-2" />
+                Copy Link
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <Button onClick={() => window.location.href = "/"} className="w-full">
           Create New Note
