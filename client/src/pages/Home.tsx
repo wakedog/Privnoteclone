@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
-import { generateKey, exportKey, encryptMessage, hashPassword } from "../lib/crypto";
+import { generateKey, exportKey, encryptMessage, hashPassword, encryptFile } from "../lib/crypto";
 import { Loader2 } from "lucide-react";
 
 interface FormData {
   content: string;
   password?: string;
   expiresIn?: string;
+  file?: FileList;
 }
 
 export function Home() {
@@ -24,6 +25,20 @@ export function Home() {
       const key = await generateKey();
       const keyString = await exportKey(key);
       const { encrypted, iv } = await encryptMessage(data.content, key);
+      
+      let encryptedFile = null;
+      let fileIv = null;
+      let fileName = null;
+      let fileType = null;
+
+      if (data.file && data.file[0]) {
+        const file = data.file[0];
+        const fileEncryption = await encryptFile(file, key);
+        encryptedFile = fileEncryption.encrypted;
+        fileIv = fileEncryption.iv;
+        fileName = file.name;
+        fileType = file.type;
+      }
 
       const passwordHash = data.password ? await hashPassword(data.password) : null;
       let expiresAt = null;
@@ -39,7 +54,11 @@ export function Home() {
           encryptedContent: encrypted, 
           iv,
           passwordHash,
-          expiresAt
+          expiresAt,
+          fileName,
+          fileType,
+          encryptedFile,
+          fileIv
         }),
       });
 
@@ -125,6 +144,16 @@ export function Home() {
                     Choose when the note should expire
                   </p>
                 </div>
+              </div>
+              <div className="space-y-2">
+                <input
+                  type="file"
+                  className="flex w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                  {...register("file")}
+                />
+                <p className="text-sm text-muted-foreground">
+                  Optionally attach a file to your note
+                </p>
               </div>
             </div>
             <Button 

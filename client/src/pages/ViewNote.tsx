@@ -3,7 +3,7 @@ import { useRoute } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { importKey, decryptMessage, hashPassword } from "../lib/crypto";
+import { importKey, decryptMessage, hashPassword, decryptFile } from "../lib/crypto";
 import { Loader2, ShieldAlert } from "lucide-react";
 
 export function ViewNote() {
@@ -47,10 +47,24 @@ export function ViewNote() {
         return;
       }
 
-      const { encryptedContent, iv } = await response.json();
+      const { encryptedContent, iv, encryptedFile, fileIv, fileName, fileType } = await response.json();
       const cryptoKey = await importKey(key);
       const decrypted = await decryptMessage(encryptedContent, iv, cryptoKey);
       setContent(decrypted);
+
+      if (encryptedFile && fileIv && fileName && fileType) {
+        const decryptedFile = await decryptFile(encryptedFile, fileIv, cryptoKey);
+        const blob = new Blob([decryptedFile], { type: fileType });
+        const url = URL.createObjectURL(blob);
+        
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.download = fileName;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        URL.revokeObjectURL(url);
+      }
       setNeedsPassword(false); // Clear password requirement after successful decryption
       setError(null); // Clear any previous errors
 

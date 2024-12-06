@@ -71,3 +71,36 @@ export async function decryptMessage(encryptedMsg: string, iv: string, key: Cryp
 
   return decoder.decode(decrypted);
 }
+
+export async function encryptFile(file: File, key: CryptoKey): Promise<{ encrypted: string; iv: string }> {
+  const arrayBuffer = await file.arrayBuffer();
+  const iv = window.crypto.getRandomValues(new Uint8Array(12));
+  
+  const encrypted = await window.crypto.subtle.encrypt(
+    {
+      name: "AES-GCM",
+      iv,
+    },
+    key,
+    arrayBuffer
+  );
+
+  return {
+    encrypted: btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(encrypted)))),
+    iv: btoa(String.fromCharCode.apply(null, Array.from(iv)))
+  };
+}
+
+export async function decryptFile(encryptedData: string, iv: string, key: CryptoKey): Promise<ArrayBuffer> {
+  const encryptedBuffer = Uint8Array.from(atob(encryptedData), (c) => c.charCodeAt(0));
+  const ivBuffer = Uint8Array.from(atob(iv), (c) => c.charCodeAt(0));
+
+  return await window.crypto.subtle.decrypt(
+    {
+      name: "AES-GCM",
+      iv: ivBuffer,
+    },
+    key,
+    encryptedBuffer
+  );
+}
