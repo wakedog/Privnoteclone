@@ -44,8 +44,14 @@ Follow these steps to set up the project on your local machine:
    git clone https://github.com/wakedog/Privnoteclone.git
    cd Privnoteclone
 
-Create a virtual environment (optional but recommended):
+2. Create a virtual environment (optional but recommended):
 
    ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+3. Install the required dependencies
+   
+  ```bash
+   pip install -r requirements.txt
+
