@@ -137,8 +137,8 @@ export function ViewNote() {
   return (
     <div className="container max-w-2xl mx-auto p-4 space-y-8">
       <Card className="p-6 space-y-4 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300 hover:shadow-lg hover:border-opacity-50">
-        <div className="bg-muted/50 p-4 rounded-lg backdrop-blur-sm transition-all duration-300 hover:bg-muted/70">
-          <pre className="whitespace-pre-wrap text-pretty">{content}</pre>
+        <div className="bg-muted/50 p-6 rounded-lg backdrop-blur-sm transition-all duration-300 hover:bg-muted/70 shadow-sm hover:shadow-md border border-border/50 hover:border-border/70">
+          <pre className="whitespace-pre-wrap break-words text-pretty leading-relaxed">{content}</pre>
         </div>
         <div className="flex justify-between items-center">
           <div className="text-sm text-muted-foreground">

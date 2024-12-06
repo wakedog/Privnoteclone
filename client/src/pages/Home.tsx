@@ -104,7 +104,7 @@ export function Home() {
             <div className="space-y-4">
               <Textarea
                 placeholder="Enter your secret message..."
-                className="min-h-[200px] transition-all duration-300 shadow-sm focus:shadow-lg focus:border-primary/50 bg-background/50 hover:bg-background/80 resize-none"
+                className="min-h-[200px] transition-all duration-300 shadow-sm focus:shadow-lg focus:border-primary/50 focus:ring-2 focus:ring-primary/30 bg-background/50 hover:bg-background/80 backdrop-blur-sm resize-none rounded-lg border-opacity-50 hover:border-opacity-70 placeholder:text-muted-foreground/70"
                 {...register("content", { required: "Content is required" })}
               />
               {errors.content && (
