@@ -33,35 +33,36 @@ export function Home() {
 
   const createNote = useMutation({
     mutationFn: async (data: FormData) => {
-      const key = await generateKey();
-      const keyString = await exportKey(key);
-      const { encrypted, iv } = await encryptMessage(data.content, key);
-      
-      let encryptedFile = null;
-      let fileIv = null;
-      let fileName = null;
-      let fileType = null;
+      try {
+        const key = await generateKey();
+        const keyString = await exportKey(key);
+        const { encrypted, iv } = await encryptMessage(data.content, key);
+        
+        let encryptedFile = null;
+        let fileIv = null;
+        let fileName = null;
+        let fileType = null;
 
-      if (data.file && data.file[0]) {
-        const file = data.file[0];
-        const fileEncryption = await encryptFile(file, key);
-        encryptedFile = fileEncryption.encrypted;
-        fileIv = fileEncryption.iv;
-        fileName = file.name;
-        fileType = file.type;
-      }
+        if (data.file && data.file[0]) {
+          console.log("Processing file:", data.file[0].name, "Size:", data.file[0].size);
+          const file = data.file[0];
+          const fileEncryption = await encryptFile(file, key);
+          console.log("File encrypted successfully");
+          encryptedFile = fileEncryption.encrypted;
+          fileIv = fileEncryption.iv;
+          fileName = file.name;
+          fileType = file.type;
+        }
 
-      const passwordHash = data.password ? await hashPassword(data.password) : null;
-      let expiresAt = null;
-      if (data.expiresIn) {
-        const hours = parseInt(data.expiresIn);
-        expiresAt = new Date(Date.now() + hours * 60 * 60 * 1000).toISOString();
-      }
+        const passwordHash = data.password ? await hashPassword(data.password) : null;
+        let expiresAt = null;
+        if (data.expiresIn) {
+          const hours = parseInt(data.expiresIn);
+          expiresAt = new Date(Date.now() + hours * 60 * 60 * 1000).toISOString();
+        }
 
-      const response = await fetch("/api/notes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
+        console.log("Preparing to send data to server");
+        const requestBody = { 
           encryptedContent: encrypted, 
           iv,
           passwordHash,
@@ -70,16 +71,29 @@ export function Home() {
           fileType,
           encryptedFile,
           fileIv
-        }),
-      });
+        };
+        console.log("Request payload size:", new Blob([JSON.stringify(requestBody)]).size);
+        
+        const response = await fetch("/api/notes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestBody),
+        });
 
-      if (!response.ok) {
-        throw new Error("Failed to create note");
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Server response:", errorData);
+          throw new Error(errorData.error || "Failed to create note");
+        }
+
+        const { id } = await response.json();
+        const noteUrl = `${window.location.origin}/note/${id}#${keyString}`;
+        setUrl(noteUrl);
+        return noteUrl;
+      } catch (error) {
+        console.error("Error creating note:", error);
+        throw error;
       }
-
-      const { id } = await response.json();
-      const noteUrl = `${window.location.origin}/note/${id}#${keyString}`;
-      setUrl(noteUrl);
     },
     onError: () => {
       toast({
