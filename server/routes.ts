@@ -1,10 +1,13 @@
-import { Router } from "express";
+import { Router, json } from "express";
 import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { notes, insertNoteSchema } from "@db/schema";
 import { z } from "zod";
 
 export const router = Router();
+
+// Increase JSON payload limit for file uploads
+router.use(json({ limit: '50mb' }));
 
 // Create a new note
 router.post("/api/notes", async (req, res) => {
@@ -57,6 +60,10 @@ router.post("/api/notes/:id", async (req, res) => {
     res.json({
       encryptedContent: note.encryptedContent,
       iv: note.iv,
+      encryptedFile: note.encryptedFile,
+      fileIv: note.fileIv,
+      fileName: note.fileName,
+      fileType: note.fileType
     });
 
   } catch (error) {
