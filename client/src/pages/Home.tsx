@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
-import { generateKey, exportKey, encryptMessage, hashPassword, encryptFile } from "../lib/crypto";
+import { generateKey, exportKey, encryptMessage, hashPassword } from "../lib/crypto";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Loader2, Share2, Copy, Twitter, Facebook, Linkedin } from "lucide-react";
 import {
@@ -19,18 +19,6 @@ interface FormData {
   content: string;
   password?: string;
   expiresIn?: string;
-  
-}
-
-interface CreateNoteData {
-  encryptedContent: string;
-  iv: string;
-  passwordHash: string | null;
-  expiresAt: string | null;
-  fileName: string | null;
-  fileType: string | null;
-  encryptedFile: string | null;
-  fileIv: string | null;
 }
 
 export function Home() {
@@ -45,13 +33,6 @@ export function Home() {
         const keyString = await exportKey(key);
         const { encrypted, iv } = await encryptMessage(data.content, key);
         
-        let encryptedFile = null;
-        let fileIv = null;
-        let fileName = null;
-        let fileType = null;
-
-        
-
         const passwordHash = data.password ? await hashPassword(data.password) : null;
         let expiresAt = null;
         if (data.expiresIn) {
@@ -59,16 +40,12 @@ export function Home() {
           expiresAt = new Date(Date.now() + hours * 60 * 60 * 1000).toISOString();
         }
 
-        console.log("Preparing to send data to server");
         const requestBody = { 
           encryptedContent: encrypted, 
           iv,
           passwordHash,
           expiresAt,
-          
         };
-        console.log("Request payload size:", new Blob([JSON.stringify(requestBody)]).size);
-        console.log("Request payload size:", new Blob([JSON.stringify(requestBody)]).size);
         
         const response = await fetch("/api/notes", {
           method: "POST",
@@ -78,7 +55,6 @@ export function Home() {
 
         if (!response.ok) {
           const errorData = await response.json();
-          console.error("Server response:", errorData);
           throw new Error(errorData.error || "Failed to create note");
         }
 
@@ -86,13 +62,12 @@ export function Home() {
         const noteUrl = `${window.location.origin}/note/${id}#${keyString}`;
         setUrl(noteUrl);
         return noteUrl;
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error creating note:", error);
         throw error;
       }
     },
     onError: (error: any) => {
-      console.error("Detailed error:", error);
       const errorMessage = error?.message || "Failed to create encrypted note";
       toast({
         variant: "destructive",
@@ -106,21 +81,13 @@ export function Home() {
     createNote.mutate(data);
   };
 
-  const copyToClipboard = () => {
-    if (url) {
-      navigator.clipboard.writeText(url);
-      toast({
-        title: "Copied!",
-        description: "The secure link has been copied to your clipboard",
-      });
-    }
-  };
-
   return (
     <div className="container max-w-2xl mx-auto p-6 space-y-10">
       <header className="flex justify-between items-center mb-8">
         <div className="flex-1">
-          <h1 className="text-5xl font-bold tracking-tighter bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Secure Notes</h1>
+          <h1 className="text-5xl font-bold tracking-tighter bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            Secure Notes
+          </h1>
           <p className="text-muted-foreground text-lg mt-2">
             Create encrypted notes that self-destruct after being read
           </p>
@@ -173,7 +140,6 @@ export function Home() {
                   </p>
                 </div>
               </div>
-              
             </div>
             <Button 
               type="submit" 
@@ -192,7 +158,13 @@ export function Home() {
               <p className="text-sm font-mono">{url}</p>
             </div>
             <div className="flex gap-2">
-              <Button onClick={copyToClipboard} className="flex-1">
+              <Button onClick={() => {
+                navigator.clipboard.writeText(url);
+                toast({
+                  title: "Copied!",
+                  description: "The secure link has been copied to your clipboard",
+                });
+              }} className="flex-1">
                 <Copy className="h-4 w-4 mr-2" />
                 Copy Secure Link
               </Button>
