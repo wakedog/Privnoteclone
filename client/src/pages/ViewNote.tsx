@@ -79,8 +79,8 @@ export function ViewNote() {
 
   if (needsPassword) {
     return (
-      <div className="container max-w-2xl mx-auto p-4 space-y-8">
-        <Card className="p-6 space-y-4">
+      <div className="container max-w-2xl mx-auto p-6 space-y-10">
+        <Card className="p-8 shadow-lg border-opacity-50 backdrop-blur-sm space-y-6">
           <h2 className="text-xl font-semibold text-center">This note is password protected</h2>
           <form onSubmit={(e) => {
             e.preventDefault();

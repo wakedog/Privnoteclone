@@ -110,21 +110,21 @@ export function Home() {
   };
 
   return (
-    <div className="container max-w-2xl mx-auto p-4 space-y-8">
-      <div className="space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight">Secure Notes</h1>
-        <p className="text-muted-foreground">
+    <div className="container max-w-2xl mx-auto p-6 space-y-10">
+      <div className="space-y-4 text-center">
+        <h1 className="text-5xl font-bold tracking-tighter bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Secure Notes</h1>
+        <p className="text-muted-foreground text-lg">
           Create encrypted notes that self-destruct after being read
         </p>
       </div>
 
-      <Card className="p-6">
+      <Card className="p-8 shadow-lg border-opacity-50 backdrop-blur-sm">
         {!url ? (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-4">
               <Textarea
                 placeholder="Enter your secret message..."
-                className="min-h-[200px]"
+                className="min-h-[200px] transition-all duration-200 focus:shadow-lg"
                 {...register("content", { required: "Content is required" })}
               />
               {errors.content && (
@@ -135,7 +135,7 @@ export function Home() {
                   <input
                     type="password"
                     placeholder="Optional password protection"
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200 hover:bg-background/80"
                     {...register("password")}
                   />
                   <p className="text-sm text-muted-foreground">
@@ -144,7 +144,7 @@ export function Home() {
                 </div>
                 <div className="space-y-2">
                   <select
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200 hover:bg-background/80"
                     {...register("expiresIn")}
                     defaultValue=""
                   >
@@ -165,7 +165,7 @@ export function Home() {
             </div>
             <Button 
               type="submit" 
-              className="w-full"
+              className="w-full transition-all duration-200 hover:shadow-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
               disabled={createNote.isPending}
             >
               {createNote.isPending && (
