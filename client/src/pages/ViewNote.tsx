@@ -176,12 +176,18 @@ export function ViewNote() {
 
   return (
     <div className="container max-w-2xl mx-auto p-4 space-y-8">
-      <Card className="p-6 space-y-4 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300 hover:shadow-lg hover:border-opacity-50">
-        <div className="bg-muted/50 p-6 rounded-lg backdrop-blur-sm transition-all duration-300 hover:bg-muted/70 shadow-sm hover:shadow-md border border-border/50 hover:border-border/70">
-          <pre className="whitespace-pre-wrap break-words text-pretty leading-relaxed">{content}</pre>
+      <Card className="p-8 space-y-6 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300 hover:shadow-lg hover:border-opacity-50">
+        <div className="relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-primary/5 pointer-events-none"></div>
+          <div className="bg-muted/50 p-8 rounded-lg backdrop-blur-sm transition-all duration-300 hover:bg-muted/70 shadow-sm hover:shadow-md border border-border/50 hover:border-border/70 group">
+            <pre className="whitespace-pre-wrap break-words text-pretty leading-relaxed transition-all duration-300 group-hover:scale-[1.01]">{content}</pre>
+          </div>
         </div>
         <div className="flex justify-between items-center">
-          <div className="text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground/90">
+            <svg className="w-4 h-4 text-primary/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M8 11V7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7V11M12 15V17M7 21H17C18.1046 21 19 20.1046 19 19V13C19 11.8954 18.1046 11 17 11H7C5.89543 11 5 11.8954 5 13V19C5 20.1046 5.89543 21 7 21Z" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
             This note has been destroyed and cannot be accessed again
           </div>
           <DropdownMenu>
@@ -189,9 +195,10 @@ export function ViewNote() {
               <Button 
                 variant="outline" 
                 size="icon" 
-                className="bg-background/80 hover:bg-accent/80 transition-all duration-300 hover:shadow-md backdrop-blur-sm group"
+                className="relative bg-background/80 hover:bg-accent/80 transition-all duration-300 hover:shadow-md backdrop-blur-sm group"
               >
-                <Share2 className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-primary/5 rounded-md blur group-hover:bg-primary/10 transition-colors duration-300"></div>
+                <Share2 className="relative h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
                 <span className="sr-only">Share note</span>
               </Button>
             </DropdownMenuTrigger>
@@ -204,30 +211,30 @@ export function ViewNote() {
                   const url = window.location.href;
                   window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent('Check out this secure note!')}`, '_blank');
                 }}
-                className="flex items-center gap-2 cursor-pointer transition-colors hover:bg-accent/80 focus:bg-accent/80"
+                className="group flex items-center gap-2 cursor-pointer transition-all duration-300 hover:bg-accent/80 focus:bg-accent/80 hover:pl-4"
               >
-                <Twitter className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
-                Share on Twitter
+                <Twitter className="h-4 w-4 transition-all duration-300 group-hover:scale-110 text-primary/70 group-hover:text-primary" />
+                <span className="transition-colors duration-300 group-hover:text-primary">Share on Twitter</span>
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => {
                   const url = window.location.href;
                   window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
                 }}
-                className="flex items-center gap-2 cursor-pointer transition-colors hover:bg-accent/80 focus:bg-accent/80"
+                className="group flex items-center gap-2 cursor-pointer transition-all duration-300 hover:bg-accent/80 focus:bg-accent/80 hover:pl-4"
               >
-                <Facebook className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
-                Share on Facebook
+                <Facebook className="h-4 w-4 transition-all duration-300 group-hover:scale-110 text-primary/70 group-hover:text-primary" />
+                <span className="transition-colors duration-300 group-hover:text-primary">Share on Facebook</span>
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => {
                   const url = window.location.href;
                   window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
                 }}
-                className="flex items-center gap-2 cursor-pointer transition-colors hover:bg-accent/80 focus:bg-accent/80"
+                className="group flex items-center gap-2 cursor-pointer transition-all duration-300 hover:bg-accent/80 focus:bg-accent/80 hover:pl-4"
               >
-                <Linkedin className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
-                Share on LinkedIn
+                <Linkedin className="h-4 w-4 transition-all duration-300 group-hover:scale-110 text-primary/70 group-hover:text-primary" />
+                <span className="transition-colors duration-300 group-hover:text-primary">Share on LinkedIn</span>
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => {
@@ -237,19 +244,24 @@ export function ViewNote() {
                     description: "The note link has been copied to your clipboard",
                   });
                 }}
-                className="flex items-center gap-2 cursor-pointer transition-colors hover:bg-accent/80 focus:bg-accent/80"
+                className="group flex items-center gap-2 cursor-pointer transition-all duration-300 hover:bg-accent/80 focus:bg-accent/80 hover:pl-4"
               >
-                <Copy className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
-                Copy Link
+                <Copy className="h-4 w-4 transition-all duration-300 group-hover:scale-110 text-primary/70 group-hover:text-primary" />
+                <span className="transition-colors duration-300 group-hover:text-primary">Copy Link</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
         <Button 
           onClick={() => window.location.href = "/"} 
-          className="w-full transition-all duration-300 hover:shadow-lg bg-gradient-to-r from-primary/90 via-primary to-primary/90 hover:from-primary hover:via-primary/90 hover:to-primary backdrop-blur-sm"
+          className="group w-full transition-all duration-300 hover:shadow-lg bg-gradient-to-r from-primary/90 via-primary to-primary/90 hover:from-primary hover:via-primary/90 hover:to-primary backdrop-blur-sm"
         >
-          Create New Note
+          <span className="relative inline-flex items-center gap-2 transition-transform duration-300 group-hover:translate-x-1">
+            Create New Note
+            <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 4v16m-8-8h16" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
         </Button>
       </Card>
     </div>
