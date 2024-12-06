@@ -30,8 +30,11 @@ router.post("/api/notes", async (req, res) => {
     console.error("Failed to create note:", error);
     if (error instanceof z.ZodError) {
       console.error("Validation errors:", JSON.stringify(error.errors, null, 2));
+      res.status(400).json({ error: "Invalid note data", details: error.errors });
+    } else {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      res.status(400).json({ error: errorMessage });
     }
-    res.status(400).json({ error: "Invalid note data" });
   }
 });
 

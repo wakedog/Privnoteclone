@@ -98,6 +98,7 @@ export function Home() {
           fileIv
         };
         console.log("Request payload size:", new Blob([JSON.stringify(requestBody)]).size);
+        console.log("Request payload size:", new Blob([JSON.stringify(requestBody)]).size);
         
         const response = await fetch("/api/notes", {
           method: "POST",

@@ -98,7 +98,7 @@ export async function encryptFile(file: File, key: CryptoKey): Promise<{ encrypt
     
     for (let i = 0; i < encryptedArray.length; i += chunkSize) {
       const chunk = encryptedArray.slice(i, Math.min(i + chunkSize, encryptedArray.length));
-      chunks.push(String.fromCharCode.apply(null, chunk));
+      chunks.push(String.fromCharCode.apply(null, Array.from(chunk)));
     }
     const base64Result = btoa(chunks.join(''));
     
