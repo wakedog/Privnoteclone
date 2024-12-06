@@ -47,24 +47,10 @@ export function ViewNote() {
         return;
       }
 
-      const { encryptedContent, iv, encryptedFile, fileIv, fileName, fileType } = await response.json();
+      const { encryptedContent, iv } = await response.json();
       const cryptoKey = await importKey(key);
       const decrypted = await decryptMessage(encryptedContent, iv, cryptoKey);
       setContent(decrypted);
-
-      if (encryptedFile && fileIv && fileName && fileType) {
-        const decryptedFile = await decryptFile(encryptedFile, fileIv, cryptoKey);
-        const blob = new Blob([decryptedFile], { type: fileType });
-        const url = URL.createObjectURL(blob);
-        
-        const downloadLink = document.createElement('a');
-        downloadLink.href = url;
-        downloadLink.download = fileName;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        URL.revokeObjectURL(url);
-      }
       setNeedsPassword(false); // Clear password requirement after successful decryption
       setError(null); // Clear any previous errors
 

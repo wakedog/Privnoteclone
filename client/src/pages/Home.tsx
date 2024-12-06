@@ -12,7 +12,7 @@ interface FormData {
   content: string;
   password?: string;
   expiresIn?: string;
-  file?: FileList;
+  
 }
 
 interface CreateNoteData {
@@ -43,41 +43,7 @@ export function Home() {
         let fileName = null;
         let fileType = null;
 
-        if (data.file && data.file[0]) {
-          const file = data.file[0];
-          const maxSize = 25 * 1024 * 1024; // 25MB limit for better handling
-          
-          if (file.size > maxSize) {
-            throw new Error("File size exceeds 25MB limit. Please choose a smaller file.");
-          }
-          
-          console.log("Processing file:", file.name, "Size:", file.size);
-          
-          try {
-            console.log(`Starting encryption for file: ${file.name} (${file.size} bytes)`);
-            
-            // Validate file type
-            if (!file.type) {
-              throw new Error("File type is not supported");
-            }
-            
-            const fileEncryption = await encryptFile(file, key);
-            console.log(`File encryption completed. Encrypted data length: ${fileEncryption.encrypted.length}`);
-            
-            encryptedFile = fileEncryption.encrypted;
-            fileIv = fileEncryption.iv;
-            fileName = file.name;
-            fileType = file.type;
-            
-            console.log("File metadata prepared successfully");
-          } catch (error: any) {
-            console.error("Detailed file encryption error:", error);
-            if (error.message.includes("Maximum call stack size exceeded")) {
-              throw new Error("File is too large to process. Please try a smaller file.");
-            }
-            throw new Error(`File encryption failed: ${error?.message || 'Unknown error occurred during encryption'}`);
-          }
-        }
+        
 
         const passwordHash = data.password ? await hashPassword(data.password) : null;
         let expiresAt = null;
@@ -92,10 +58,7 @@ export function Home() {
           iv,
           passwordHash,
           expiresAt,
-          fileName,
-          fileType,
-          encryptedFile,
-          fileIv
+          
         };
         console.log("Request payload size:", new Blob([JSON.stringify(requestBody)]).size);
         console.log("Request payload size:", new Blob([JSON.stringify(requestBody)]).size);
@@ -198,16 +161,7 @@ export function Home() {
                   </p>
                 </div>
               </div>
-              <div className="space-y-2">
-                <input
-                  type="file"
-                  className="flex w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
-                  {...register("file")}
-                />
-                <p className="text-sm text-muted-foreground">
-                  Optionally attach a file to your note
-                </p>
-              </div>
+              
             </div>
             <Button 
               type="submit" 
