@@ -91,16 +91,21 @@ export async function encryptFile(file: File, key: CryptoKey): Promise<{ encrypt
     );
     console.log("File encrypted successfully, encrypted size:", encrypted.byteLength);
 
-    // Convert to Base64 safely
+    // Convert to Base64 with smaller chunks
     const encryptedArray = new Uint8Array(encrypted);
-    const chunks: string[] = [];
-    const chunkSize = 32768; // 32KB chunks for safer string conversion
+    let base64Result = '';
+    const chunkSize = 8192; // 8KB chunks for more reliable conversion
     
-    for (let i = 0; i < encryptedArray.length; i += chunkSize) {
-      const chunk = encryptedArray.slice(i, Math.min(i + chunkSize, encryptedArray.length));
-      chunks.push(String.fromCharCode.apply(null, Array.from(chunk)));
+    try {
+      for (let i = 0; i < encryptedArray.length; i += chunkSize) {
+        const chunk = encryptedArray.slice(i, Math.min(i + chunkSize, encryptedArray.length));
+        base64Result += btoa(String.fromCharCode(...Array.from(chunk)));
+      }
+      console.log("Base64 conversion successful, length:", base64Result.length);
+    } catch (error) {
+      console.error("Base64 conversion error:", error);
+      throw new Error("Failed to convert encrypted data to Base64");
     }
-    const base64Result = btoa(chunks.join(''));
     
     console.log("File converted to Base64 successfully");
     return {

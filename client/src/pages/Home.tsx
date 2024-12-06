@@ -121,11 +121,13 @@ export function Home() {
         throw error;
       }
     },
-    onError: () => {
+    onError: (error: any) => {
+      console.error("Detailed error:", error);
+      const errorMessage = error?.message || "Failed to create encrypted note";
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to create encrypted note",
+        description: errorMessage,
       });
     },
   });

@@ -6,14 +6,39 @@ import { z } from "zod";
 
 export const router = Router();
 
+// Custom error handling middleware for payload size errors
+router.use((err: any, req: any, res: any, next: any) => {
+  if (err instanceof SyntaxError && err.status === 413) {
+    return res.status(413).json({
+      error: "Request payload too large",
+      details: "The uploaded file exceeds the size limit"
+    });
+  }
+  next(err);
+});
+
 // Increase JSON payload limit for file uploads
-router.use(json({ limit: '50mb' }));
+router.use(json({
+  limit: '50mb',
+  verify: (req: any, res: any, buf: Buffer) => {
+    if (buf.length > 50 * 1024 * 1024) {
+      throw new Error("Payload too large");
+    }
+  }
+}));
 
 // Add request size logging middleware
 router.use((req, res, next) => {
   const contentLength = req.get('content-length');
   if (contentLength) {
-    console.log(`Request size: ${parseInt(contentLength) / 1024 / 1024} MB`);
+    const size = parseInt(contentLength) / 1024 / 1024;
+    console.log(`Request size: ${size.toFixed(2)} MB`);
+    if (size > 50) {
+      return res.status(413).json({
+        error: "Request payload too large",
+        details: `File size (${size.toFixed(2)}MB) exceeds the 50MB limit`
+      });
+    }
   }
   next();
 });
