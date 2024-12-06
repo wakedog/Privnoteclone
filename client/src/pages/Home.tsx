@@ -111,12 +111,15 @@ export function Home() {
                   <select
                     className="w-full px-3 py-2 border rounded-md"
                     {...register("expiresIn")}
+                    defaultValue=""
                   >
                     <option value="">Never expire</option>
                     <option value="1">1 hour</option>
+                    <option value="12">12 hours</option>
                     <option value="24">24 hours</option>
                     <option value="72">3 days</option>
                     <option value="168">1 week</option>
+                    <option value="720">30 days</option>
                   </select>
                   <p className="text-sm text-muted-foreground">
                     Choose when the note should expire
