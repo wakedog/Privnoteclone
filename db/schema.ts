@@ -12,7 +12,10 @@ export const notes = pgTable("notes", {
   passwordHash: text("password_hash"), // Optional password protection
 });
 
-export const insertNoteSchema = createInsertSchema(notes);
+// Custom schema with date transformation
+export const insertNoteSchema = createInsertSchema(notes, {
+  expiresAt: z.string().nullable().transform((val) => val ? new Date(val) : null)
+});
 export const selectNoteSchema = createSelectSchema(notes);
 export type InsertNote = z.infer<typeof insertNoteSchema>;
 export type Note = z.infer<typeof selectNoteSchema>;
