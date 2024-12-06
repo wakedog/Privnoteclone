@@ -100,7 +100,7 @@ export function Home() {
                   <input
                     type="password"
                     placeholder="Optional password protection"
-                    className="w-full px-3 py-2 border rounded-md"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     {...register("password")}
                   />
                   <p className="text-sm text-muted-foreground">
@@ -109,7 +109,7 @@ export function Home() {
                 </div>
                 <div className="space-y-2">
                   <select
-                    className="w-full px-3 py-2 border rounded-md"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     {...register("expiresIn")}
                     defaultValue=""
                   >
