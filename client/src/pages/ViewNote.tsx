@@ -86,8 +86,8 @@ export function ViewNote() {
   if (needsPassword) {
     return (
       <div className="container max-w-2xl mx-auto p-6 space-y-10">
-        <Card className="p-8 shadow-lg border-opacity-50 backdrop-blur-sm space-y-6">
-          <h2 className="text-xl font-semibold text-center">This note is password protected</h2>
+        <Card className="p-8 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300 hover:shadow-lg hover:border-opacity-50 space-y-6">
+          <h2 className="text-xl font-semibold text-center bg-gradient-to-r from-primary/90 to-primary/70 bg-clip-text text-transparent">This note is password protected</h2>
           <form onSubmit={(e) => {
             e.preventDefault();
             setLoading(true);
@@ -101,7 +101,7 @@ export function ViewNote() {
                 id="password"
                 type="password"
                 placeholder="Enter password"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200 hover:bg-background/80"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -125,7 +125,7 @@ export function ViewNote() {
   if (error) {
     return (
       <div className="container max-w-2xl mx-auto p-4 space-y-8">
-        <Card className="p-6 text-center space-y-4">
+        <Card className="p-6 text-center space-y-4 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300">
           <ShieldAlert className="h-12 w-12 mx-auto text-destructive" />
           <h2 className="text-xl font-semibold">{error}</h2>
           <Button onClick={() => window.location.href = "/"}>
@@ -138,9 +138,9 @@ export function ViewNote() {
 
   return (
     <div className="container max-w-2xl mx-auto p-4 space-y-8">
-      <Card className="p-6 space-y-4">
-        <div className="bg-muted p-4 rounded-lg">
-          <pre className="whitespace-pre-wrap">{content}</pre>
+      <Card className="p-6 space-y-4 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300 hover:shadow-lg hover:border-opacity-50">
+        <div className="bg-muted/50 p-4 rounded-lg backdrop-blur-sm transition-all duration-300 hover:bg-muted/70">
+          <pre className="whitespace-pre-wrap text-pretty">{content}</pre>
         </div>
         <div className="flex justify-between items-center">
           <div className="text-sm text-muted-foreground">

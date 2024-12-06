@@ -83,27 +83,27 @@ export function Home() {
 
   return (
     <div className="container max-w-2xl mx-auto p-6 space-y-10">
-      <header className="flex justify-between items-center mb-8">
+      <header className="flex justify-between items-center mb-12 px-4 py-6 rounded-xl bg-gradient-to-b from-background to-muted/30">
         <div className="flex-1">
-          <h1 className="text-5xl font-bold tracking-tighter bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+          <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent transition-all duration-300 hover:to-primary/70">
             Secure Notes
           </h1>
-          <p className="text-muted-foreground text-lg mt-2">
+          <p className="text-muted-foreground text-lg mt-3 leading-relaxed max-w-md">
             Create encrypted notes that self-destruct after being read
           </p>
         </div>
-        <div className="flex items-center gap-4 transition-opacity duration-200 hover:opacity-90">
+        <div className="flex items-center gap-4">
           <ThemeToggle />
         </div>
       </header>
 
-      <Card className="p-8 shadow-lg border-opacity-50 backdrop-blur-sm">
+      <Card className="p-8 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300 hover:shadow-lg hover:border-opacity-50">
         {!url ? (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-4">
               <Textarea
                 placeholder="Enter your secret message..."
-                className="min-h-[200px] transition-all duration-200 focus:shadow-lg"
+                className="min-h-[200px] transition-all duration-300 focus:shadow-lg focus:border-primary/50 bg-background/50 hover:bg-background/80"
                 {...register("content", { required: "Content is required" })}
               />
               {errors.content && (
