@@ -92,7 +92,7 @@ export function Home() {
             Create encrypted notes that self-destruct after being read
           </p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 transition-opacity duration-200 hover:opacity-90">
           <ThemeToggle />
         </div>
       </header>
