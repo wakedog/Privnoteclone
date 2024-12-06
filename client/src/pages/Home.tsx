@@ -45,10 +45,10 @@ export function Home() {
 
         if (data.file && data.file[0]) {
           const file = data.file[0];
-          const maxSize = 50 * 1024 * 1024; // 50MB limit
+          const maxSize = 25 * 1024 * 1024; // 25MB limit for better handling
           
           if (file.size > maxSize) {
-            throw new Error("File size exceeds 50MB limit");
+            throw new Error("File size exceeds 25MB limit. Please choose a smaller file.");
           }
           
           console.log("Processing file:", file.name, "Size:", file.size);

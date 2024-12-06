@@ -7,7 +7,16 @@ import { z } from "zod";
 export const router = Router();
 
 // Increase JSON payload limit for file uploads
-router.use(json({ limit: '100mb' }));
+router.use(json({ limit: '50mb' }));
+
+// Add request size logging middleware
+router.use((req, res, next) => {
+  const contentLength = req.get('content-length');
+  if (contentLength) {
+    console.log(`Request size: ${parseInt(contentLength) / 1024 / 1024} MB`);
+  }
+  next();
+});
 
 // Create a new note
 router.post("/api/notes", async (req, res) => {
