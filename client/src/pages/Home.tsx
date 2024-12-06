@@ -104,7 +104,7 @@ export function Home() {
             <div className="space-y-4">
               <Textarea
                 placeholder="Enter your secret message..."
-                className="min-h-[200px] transition-all duration-300 focus:shadow-lg focus:border-primary/50 bg-background/50 hover:bg-background/80"
+                className="min-h-[200px] transition-all duration-300 shadow-sm focus:shadow-lg focus:border-primary/50 bg-background/50 hover:bg-background/80 resize-none"
                 {...register("content", { required: "Content is required" })}
               />
               {errors.content && (
@@ -144,7 +144,7 @@ export function Home() {
             </div>
             <Button 
               type="submit" 
-              className="w-full transition-all duration-200 hover:shadow-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+              className="w-full transition-all duration-300 hover:shadow-lg bg-gradient-to-r from-primary/90 via-primary to-primary/90 hover:from-primary hover:via-primary/90 hover:to-primary backdrop-blur-sm"
               disabled={createNote.isPending}
             >
               {createNote.isPending && (
