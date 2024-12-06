@@ -115,7 +115,7 @@ export function Home() {
                   <input
                     type="password"
                     placeholder="Optional password protection"
-                    className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200 hover:bg-background/80"
+                    className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:border-primary/50 transition-all duration-300 hover:bg-background/80 hover:border-primary/30 backdrop-blur-sm"
                     {...register("password")}
                   />
                   <p className="text-sm text-muted-foreground">
@@ -124,7 +124,7 @@ export function Home() {
                 </div>
                 <div className="space-y-2">
                   <select
-                    className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200 hover:bg-background/80"
+                    className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:border-primary/50 transition-all duration-300 hover:bg-background/80 hover:border-primary/30 backdrop-blur-sm"
                     {...register("expiresIn")}
                     defaultValue=""
                   >
