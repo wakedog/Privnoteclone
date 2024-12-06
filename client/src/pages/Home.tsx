@@ -83,16 +83,17 @@ export function Home() {
 
   return (
     <div className="container max-w-2xl mx-auto p-6 space-y-10">
-      <header className="flex justify-between items-center mb-12 px-4 py-6 rounded-xl bg-gradient-to-b from-background to-muted/30">
-        <div className="flex-1">
-          <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent transition-all duration-300 hover:to-primary/70">
+      <header className="relative flex flex-col items-center justify-center mb-16 px-6 py-12 rounded-2xl overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background pointer-events-none"></div>
+        <div className="relative text-center space-y-6 max-w-2xl mx-auto">
+          <h1 className="text-6xl font-extrabold tracking-tighter bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent transition-all duration-500 hover:to-primary/80 animate-gradient">
             Secure Notes
           </h1>
-          <p className="text-muted-foreground text-lg mt-3 leading-relaxed max-w-md">
+          <p className="text-muted-foreground text-xl font-light leading-relaxed max-w-lg mx-auto">
             Create encrypted notes that self-destruct after being read
           </p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="absolute top-4 right-4">
           <ThemeToggle />
         </div>
       </header>
