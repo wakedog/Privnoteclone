@@ -2,11 +2,11 @@
 
 import { ThemeProvider as NextThemesProvider } from "next-themes"
 
-interface ThemeProviderProps {
-  children: React.ReactNode;
-  attribute?: string;
-  defaultTheme?: string;
-  enableSystem?: boolean;
+type ThemeProviderProps = {
+  children: React.ReactNode
+  attribute?: "class"
+  defaultTheme?: "system" | "dark" | "light"
+  enableSystem?: boolean
 }
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
