@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { generateKey, exportKey, encryptMessage, hashPassword, encryptFile } from "../lib/crypto";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Loader2 } from "lucide-react";
 
 interface FormData {
@@ -111,12 +112,17 @@ export function Home() {
 
   return (
     <div className="container max-w-2xl mx-auto p-6 space-y-10">
-      <div className="space-y-4 text-center">
-        <h1 className="text-5xl font-bold tracking-tighter bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Secure Notes</h1>
-        <p className="text-muted-foreground text-lg">
-          Create encrypted notes that self-destruct after being read
-        </p>
-      </div>
+      <header className="flex justify-between items-center mb-8">
+        <div className="flex-1">
+          <h1 className="text-5xl font-bold tracking-tighter bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Secure Notes</h1>
+          <p className="text-muted-foreground text-lg mt-2">
+            Create encrypted notes that self-destruct after being read
+          </p>
+        </div>
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+        </div>
+      </header>
 
       <Card className="p-8 shadow-lg border-opacity-50 backdrop-blur-sm">
         {!url ? (
