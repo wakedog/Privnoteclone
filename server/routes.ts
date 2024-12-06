@@ -101,11 +101,7 @@ router.post("/api/notes/:id", async (req, res) => {
     // Return the encrypted content
     res.json({
       encryptedContent: note.encryptedContent,
-      iv: note.iv,
-      encryptedFile: note.encryptedFile,
-      fileIv: note.fileIv,
-      fileName: note.fileName,
-      fileType: note.fileType
+      iv: note.iv
     });
 
   } catch (error) {

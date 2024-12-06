@@ -157,25 +157,28 @@ export function Home() {
             <div className="p-4 bg-muted rounded-lg break-all">
               <p className="text-sm font-mono">{url}</p>
             </div>
-            <div className="flex gap-2">
-              <Button onClick={() => {
-                navigator.clipboard.writeText(url);
-                toast({
-                  title: "Copied!",
-                  description: "The secure link has been copied to your clipboard",
-                });
-              }} className="flex-1">
+            <div className="flex items-center gap-2 mt-4">
+              <Button 
+                onClick={() => {
+                  navigator.clipboard.writeText(url);
+                  toast({
+                    title: "Copied!",
+                    description: "The secure link has been copied to your clipboard",
+                  });
+                }} 
+                className="flex-1 bg-primary hover:bg-primary/90"
+              >
                 <Copy className="h-4 w-4 mr-2" />
                 Copy Secure Link
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline">
+                  <Button variant="outline" className="bg-background hover:bg-accent">
                     <Share2 className="h-4 w-4 mr-2" />
                     Share
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuItem onClick={() => {
                     window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent('Check out this secure note!')}`, '_blank');
                   }}>
