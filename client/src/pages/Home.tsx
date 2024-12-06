@@ -188,6 +188,19 @@ export function Home() {
           </div>
         )}
       </Card>
+      <footer className="text-center text-sm text-muted-foreground space-y-2">
+        <div>
+          <a 
+            href="https://github.com/wakedog/Privnoteclone" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:underline"
+          >
+            View on GitHub
+          </a>
+        </div>
+        <div>Version 1.0.0</div>
+      </footer>
     </div>
   );
 }
