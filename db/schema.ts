@@ -16,9 +16,13 @@ export const notes = pgTable("notes", {
   fileIv: text("file_iv"), // Separate IV for file encryption
 });
 
-// Custom schema with date transformation
+// Custom schema with date transformation and file handling
 export const insertNoteSchema = createInsertSchema(notes, {
-  expiresAt: z.string().nullable().transform((val) => val ? new Date(val) : null)
+  expiresAt: z.string().nullable().transform((val) => val ? new Date(val) : null),
+  fileName: z.string().nullable(),
+  fileType: z.string().nullable(),
+  encryptedFile: z.string().nullable(),
+  fileIv: z.string().nullable()
 });
 export const selectNoteSchema = createSelectSchema(notes);
 export type InsertNote = z.infer<typeof insertNoteSchema>;

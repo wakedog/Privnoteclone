@@ -15,6 +15,17 @@ interface FormData {
   file?: FileList;
 }
 
+interface CreateNoteData {
+  encryptedContent: string;
+  iv: string;
+  passwordHash: string | null;
+  expiresAt: string | null;
+  fileName: string | null;
+  fileType: string | null;
+  encryptedFile: string | null;
+  fileIv: string | null;
+}
+
 export function Home() {
   const { toast } = useToast();
   const [url, setUrl] = useState<string | null>(null);

@@ -12,11 +12,16 @@ router.use(json({ limit: '50mb' }));
 // Create a new note
 router.post("/api/notes", async (req, res) => {
   try {
+    console.log("Received note data:", JSON.stringify(req.body, null, 2));
     const noteData = insertNoteSchema.parse(req.body);
+    console.log("Parsed note data:", JSON.stringify(noteData, null, 2));
     const [note] = await db.insert(notes).values(noteData).returning({ id: notes.id });
     res.json({ id: note.id });
   } catch (error) {
     console.error("Failed to create note:", error);
+    if (error instanceof z.ZodError) {
+      console.error("Validation errors:", JSON.stringify(error.errors, null, 2));
+    }
     res.status(400).json({ error: "Invalid note data" });
   }
 });
