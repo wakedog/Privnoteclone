@@ -76,13 +76,16 @@ export function ViewNote() {
   if (loading) {
     return (
       <div className="container max-w-2xl mx-auto p-4">
-        <Card className="p-6 space-y-4 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 animate-pulse">
-          <div className="flex items-center justify-center min-h-[200px] bg-muted/50 rounded-lg backdrop-blur-sm">
-            <Loader2 className="h-8 w-8 animate-spin text-primary/80" />
+        <Card className="p-6 space-y-4 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95">
+          <div className="flex items-center justify-center min-h-[200px] bg-muted/50 rounded-lg backdrop-blur-sm border border-border/50 transition-all duration-300">
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary/5 blur-2xl rounded-full"></div>
+              <Loader2 className="relative h-8 w-8 animate-spin text-primary opacity-80" />
+            </div>
           </div>
-          <div className="flex justify-between items-center opacity-50">
-            <div className="h-4 w-48 bg-muted rounded"></div>
-            <div className="h-8 w-8 bg-muted rounded-md"></div>
+          <div className="flex justify-between items-center">
+            <div className="h-4 w-48 bg-muted/70 rounded animate-pulse"></div>
+            <div className="h-8 w-8 bg-muted/70 rounded-md animate-pulse"></div>
           </div>
         </Card>
       </div>
@@ -133,12 +136,12 @@ export function ViewNote() {
       <div className="container max-w-2xl mx-auto p-4">
         <Card className="p-8 text-center space-y-6 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300 hover:shadow-lg">
           <div className="relative">
-            <div className="absolute inset-0 bg-destructive/10 blur-2xl rounded-full"></div>
-            <ShieldAlert className="relative h-16 w-16 mx-auto text-destructive opacity-90 animate-in fade-in-0 zoom-in-95 duration-500" />
+            <div className="absolute inset-0 bg-destructive/10 blur-3xl rounded-full"></div>
+            <ShieldAlert className="relative h-16 w-16 mx-auto text-destructive opacity-90 animate-in fade-in-0 zoom-in-95 duration-500 hover:scale-105 transition-transform" />
           </div>
-          <div className="space-y-3">
-            <h2 className="text-2xl font-semibold bg-gradient-to-r from-destructive/90 to-destructive/70 bg-clip-text text-transparent animate-in slide-in-from-bottom-2 duration-500">{error}</h2>
-            <p className="text-muted-foreground animate-in slide-in-from-bottom-3 duration-500">The note may have been deleted or accessed already.</p>
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold bg-gradient-to-r from-destructive via-destructive/90 to-destructive/70 bg-clip-text text-transparent animate-in slide-in-from-bottom-2 duration-500 animate-gradient">{error}</h2>
+            <p className="text-muted-foreground/90 animate-in slide-in-from-bottom-3 duration-500">The note may have been deleted or accessed already.</p>
           </div>
           <Button 
             onClick={() => window.location.href = "/"} 
