@@ -146,41 +146,60 @@ export function ViewNote() {
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="bg-background/80 hover:bg-accent/80 transition-all duration-200">
-                <Share2 className="h-4 w-4" />
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="bg-background/80 hover:bg-accent/80 transition-all duration-300 hover:shadow-md backdrop-blur-sm group"
+              >
+                <Share2 className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
                 <span className="sr-only">Share note</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem onClick={() => {
-                const url = window.location.href;
-                window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent('Check out this secure note!')}`, '_blank');
-              }}>
-                <Twitter className="h-4 w-4 mr-2" />
+            <DropdownMenuContent 
+              align="end" 
+              className="w-56 backdrop-blur-sm bg-background/95 border-opacity-50 shadow-lg animate-in fade-in-0 zoom-in-95"
+            >
+              <DropdownMenuItem 
+                onClick={() => {
+                  const url = window.location.href;
+                  window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent('Check out this secure note!')}`, '_blank');
+                }}
+                className="flex items-center gap-2 cursor-pointer transition-colors hover:bg-accent/80 focus:bg-accent/80"
+              >
+                <Twitter className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
                 Share on Twitter
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                const url = window.location.href;
-                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
-              }}>
-                <Facebook className="h-4 w-4 mr-2" />
+              <DropdownMenuItem 
+                onClick={() => {
+                  const url = window.location.href;
+                  window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+                }}
+                className="flex items-center gap-2 cursor-pointer transition-colors hover:bg-accent/80 focus:bg-accent/80"
+              >
+                <Facebook className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
                 Share on Facebook
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                const url = window.location.href;
-                window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
-              }}>
-                <Linkedin className="h-4 w-4 mr-2" />
+              <DropdownMenuItem 
+                onClick={() => {
+                  const url = window.location.href;
+                  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+                }}
+                className="flex items-center gap-2 cursor-pointer transition-colors hover:bg-accent/80 focus:bg-accent/80"
+              >
+                <Linkedin className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
                 Share on LinkedIn
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                navigator.clipboard.writeText(window.location.href);
-                toast({
-                  title: "Link copied!",
-                  description: "The note link has been copied to your clipboard",
-                });
-              }}>
-                <Copy className="h-4 w-4 mr-2" />
+              <DropdownMenuItem 
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  toast({
+                    title: "Link copied!",
+                    description: "The note link has been copied to your clipboard",
+                  });
+                }}
+                className="flex items-center gap-2 cursor-pointer transition-colors hover:bg-accent/80 focus:bg-accent/80"
+              >
+                <Copy className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
                 Copy Link
               </DropdownMenuItem>
             </DropdownMenuContent>
