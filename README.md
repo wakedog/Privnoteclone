@@ -50,8 +50,38 @@ Follow these steps to set up the project on your local machine:
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-3. Install the required dependencies
+3. Install the required dependencies:
    
-  ```bash
+   ```bash
    pip install -r requirements.txt
 
+4. Run the application:
+
+   ```bash
+   python app.py
+
+5. Access the app in your web browser at http://127.0.0.1:5000.
+
+Usage:
+
+1. Open the application in your browser.
+2. Write your note in the provided text box.
+3. Click "Create Note" to generate a unique link.
+4. Share the link with the recipient.
+5. The note will self-destruct after being accessed.
+
+Contributing:
+
+We welcome contributions to improve Privnoteclone! To contribute:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push to your forked repository.
+5. Open a pull request with a detailed description of your changes.
+
+License
+This project is licensed under the MIT License. See the LICENSE file for more information.
+
+Disclaimer
+This project is for educational purposes only and should not be used for production-level sensitive communication. The security and privacy features are implemented as a proof of concept and may not meet stringent security standards.
