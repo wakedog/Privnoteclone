@@ -95,37 +95,57 @@ export function ViewNote() {
   if (needsPassword) {
     return (
       <div className="container max-w-2xl mx-auto p-6 space-y-10">
-        <Card className="p-8 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300 hover:shadow-lg hover:border-opacity-50 space-y-6">
-          <h2 className="text-xl font-semibold text-center bg-gradient-to-r from-primary/90 to-primary/70 bg-clip-text text-transparent">This note is password protected</h2>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            setLoading(true);
-            fetchAndDecryptNote();
-          }} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                placeholder="Enter password"
-                className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:border-primary/50 transition-all duration-300 hover:bg-background/80 hover:border-primary/30 backdrop-blur-sm"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+        <Card className="p-8 shadow-xl border-opacity-40 backdrop-blur-sm bg-gradient-to-b from-card to-card/95 transition-all duration-300 hover:shadow-lg hover:border-opacity-50">
+          <div className="space-y-6">
+            <div className="text-center space-y-2">
+              <div className="relative w-16 h-16 mx-auto mb-4">
+                <div className="absolute inset-0 bg-primary/10 blur-2xl rounded-full"></div>
+                <div className="relative flex items-center justify-center w-full h-full">
+                  <svg className="w-8 h-8 text-primary/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 10V14M12 21H5C3.89543 21 3 20.1046 3 19V14C3 12.8954 3.89543 12 5 12H19C20.1046 12 21 12.8954 21 14V19C21 20.1046 20.1046 21 19 21H12ZM12 21V14M8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7V12H8V7Z" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              <h2 className="text-2xl font-semibold bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent animate-gradient">Password Protected Note</h2>
+              <p className="text-muted-foreground/90">Enter the password to view this secure note</p>
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Verifying...
-                </>
-              ) : (
-                "Unlock Note"
-              )}
-            </Button>
-          </form>
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                setLoading(true);
+                fetchAndDecryptNote();
+              }} 
+              className="space-y-6 animate-in slide-in-from-bottom-2 duration-500"
+            >
+              <div className="space-y-2">
+                <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="Enter password"
+                  className="flex h-10 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:border-primary/50 transition-all duration-300 hover:bg-background/80 hover:border-primary/30 backdrop-blur-sm"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <Button 
+                type="submit" 
+                className="w-full transition-all duration-300 hover:shadow-lg bg-gradient-to-r from-primary/90 via-primary to-primary/90 hover:from-primary hover:via-primary/90 hover:to-primary backdrop-blur-sm"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Verifying...
+                  </>
+                ) : (
+                  "Unlock Note"
+                )}
+              </Button>
+            </form>
+          </div>
         </Card>
       </div>
     );
